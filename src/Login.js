@@ -1,8 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "./Login.css";
 import {ArrowForwardIos} from "@material-ui/icons";
+import {auth} from "./firebase";
+// import {auth} from "./firebase";
 
 function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const handleLogin = (e) => {
+        e.preventDefault(); // 새로고침 방지
+        auth.signInWithEmailAndPassword(email, password).then((auth) => {
+            console.log(auth);
+        }).catch((e) => alert(e.message));
+        setEmail("");
+        setPassword("");
+    }
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        auth.createUserWithEmailAndPassword(email, password).then((auth) => {
+            if (auth) {
+                console.log(auth);
+            }
+        }).catch((e) => alert(e.message));
+        setEmail("");
+        setPassword("");
+    }
+
     return (<div className="login">
         <div className="login_container">
             <div className="login_logo">
@@ -46,17 +70,21 @@ function Login() {
                     </div>
                     <div className="login_inputFields">
                         <div className="login_inputField">
-                            <input type="text" placeholder="이메일"/>
+                            <input type="text" placeholder="이메일" value={email}
+                                   onChange={(e) => setEmail(e.target.value)}/>
                         </div>
                         <div className="login_inputField">
-                            <input type="password" placeholder="비밀번호"/>
+                            <input type="password" placeholder="비밀번호"
+                                   value={password}
+                                   onChange={(e) => setPassword(e.target.value)}/>
                         </div>
                     </div>
                     <div className="login_forgButton">
                         <small>비밀번호 찾기</small>
-                        <button type="submit"> 로그인</button>
+                        <button type="submit" onClick={handleLogin}> 로그인
+                        </button>
                     </div>
-                    <button>회원가입</button>
+                    <button onClick={handleRegister}>회원가입</button>
                 </div>
             </div>
             <div className="login_lang">
