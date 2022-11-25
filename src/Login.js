@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import "./Login.css";
 import {ArrowForwardIos} from "@material-ui/icons";
-import {auth} from "./firebase";
-// import {auth} from "./firebase";
+import {auth, provider} from "./firebase";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const handleLogin = (e) => {
+        console.log(e);
         e.preventDefault(); // 새로고침 방지
         auth.signInWithEmailAndPassword(email, password).then((auth) => {
             console.log(auth);
@@ -27,6 +27,17 @@ function Login() {
         setPassword("");
     }
 
+    const signIn = () => {
+        auth.signInWithPopup(provider).catch((e) => alert(e.message));
+        console.log(auth);
+    }
+
+    const logout = () =>{
+        auth.signOut().catch((e)=> alert(e.message));
+        console.log('로그아웃');
+        console.log(auth);
+    }
+
     return (<div className="login">
         <div className="login_container">
             <div className="login_logo">
@@ -44,13 +55,13 @@ function Login() {
                         <img className="login_gooogleAuth"
                              src="https://media-public.canva.com/MADnBiAubGA/3/screen.svg"
                              alt=""/>
-                        <p> 구글 아이디로 로그인 </p>
+                        <p onClick={signIn}> 구글 아이디로 로그인 </p>
                     </div>
                     <div className="login_authOption">
                         <img className="login_gooogleAuth"
                              src="https://1000logos.net/wp-content/uploads/2016/11/Facebook-logo-500x350.png"
                              alt=""/>
-                        <p> 페이스북 아이디로 로그인 </p>
+                        <p onClick={logout}> 페이스북 아이디로 로그인 </p>
                     </div>
                     <div className="login_authDesc">
                         <p>

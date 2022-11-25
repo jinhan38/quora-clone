@@ -1,13 +1,16 @@
 import React from 'react';
 import "./QuoraBox.css"
 import {Avatar} from "@material-ui/core";
+import {useSelector} from "react-redux";
+import {selectUser} from "./features/userSlice";
 
-function QuoraBox(props) {
+function QuoraBox() {
+    const user = useSelector(selectUser);
     return (
         <div className="quoraBox">
             <div className="quoraBox_info">
-                <Avatar/>
-                <h5>리액트 연습</h5>
+                <Avatar src={user.photo}/>
+                <h5>{user.displayName}</h5>
             </div>
             <div className="quoraBox_quora">
                 <p>뭐가 궁금하지요?</p>

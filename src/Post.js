@@ -6,8 +6,10 @@ import {
     ArrowUpwardOutlined, ChatBubbleOutlineOutlined, MoreHorizOutlined,
     RepeatOneOutlined, ShareOutlined
 } from "@material-ui/icons";
+import Modal from 'react-modal';
 
-function Post(props) {
+function Post() {
+
     return (
         <div className="post">
             <div className="post_info">

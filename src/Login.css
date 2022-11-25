@@ -17,7 +17,6 @@
     border-radius: 10px;
 }
 
-
 .login_logo {
     display: flex;
     justify-content: center;
@@ -218,5 +217,3 @@
 .login_footer > p:hover {
     text-decoration: underline;
 }
-
-
