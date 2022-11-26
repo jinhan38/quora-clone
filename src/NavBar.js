@@ -8,13 +8,31 @@ import {
 import {Avatar, Button} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import {selectUser} from "./features/userSlice";
-import {auth} from "./firebase";
 import Modal from 'react-modal';
+import firebase from "firebase/compat/app";
+import db, {auth} from "./firebase";
 
 function NavBar() {
 
     const user = useSelector(selectUser);
     const [openModal, setOpenModal] = useState(false);
+    const [input, setInput] = useState("");
+    const [inputUrl, setInputUrl] = useState("");
+    const handleQuestion = (e) => {
+        e.preventDefault();
+        setOpenModal(false);
+        db.collection("questions").add({
+            question: input,
+            imageUrl: inputUrl,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            user: user,
+        }).then(() => {
+            setInput("");
+            setInputUrl("");
+        });
+
+    }
+
     return (
         <div className="navbar">
             <div className="qHeader_logo">
@@ -46,7 +64,7 @@ function NavBar() {
             <div className="qHeader_Rem">
                 <div className="qHeader_avatar">
                     <Avatar src={user.photo} onClick={() => {
-                        auth.signOut().then(r => {
+                        auth.signOut().then(() => {
                             console.log("로그아웃 성공");
                         });
                     }}/>
@@ -84,14 +102,21 @@ function NavBar() {
                         </div>
                     </div>
                     <div className="modal_field">
-                        <input type="text" placeholder="질문을 작성하세요"/>
+                        <input type="text" placeholder="질문을 작성하세요" required
+                               value={input}
+                               onChange={(e) => setInput(e.target.value)}/>
                         <div className="modal_fieldLink">
                             <Link/>
-                            <input type="text" placeholder="URL 링크만 작성해주세요"/>
+                            <input type="text" placeholder="URL 링크만 작성해주세요"
+                                   value={inputUrl}
+                                   onChange={(e) => setInputUrl(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div className="modal_buttons">
-                        <button className="add" type="text">등록</button>
+                        <button className="add" type="text"
+                                onClick={handleQuestion}>등록
+                        </button>
                         <button className="can"
                                 onClick={() => setOpenModal(false)}>닫기
                         </button>
